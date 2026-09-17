@@ -19,7 +19,7 @@ python predict.py
 ## Other notes
 
 - [`Effective AI Prompting.md`](Effective%20AI%20Prompting.md) — exercises comparing vague vs. specific prompts across a few scenarios.
-- [`How a Neural Network Learns...md`](<How a Neural Network Learns: Simulating Weight Adjustment and Decision Making.md>) — a walkthrough of manually adjusting weights over a small set of training rounds.
+- [How a Neural Network Learns: Simulating Weight Adjustment and Decision Making](<./How a Neural Network Learns: Simulating Weight Adjustment and Decision Making.md>) — a walkthrough of manually adjusting weights over a small set of training rounds.
 - [`SoftwareLicensing.md`](SoftwareLicensing.md) — lab notes on identifying and comparing open-source license terms.
 
 These are coursework notes, not polished guides — kept here because they're a reasonably useful reference for myself later.
