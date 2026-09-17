@@ -1,23 +1,28 @@
 # ai-programming-tools
 
-![Python](https://img.shields.io/badge/Python-3.10%2B-blue?logo=python&logoColor=white)
-![AI](https://img.shields.io/badge/AI-Productivity-orange)
+A small collection from working through applied-AI coursework and exercises: one working ML project, plus lab notes on prompting and licensing.
 
-A collection of essential tools and documentation designed to leverage Artificial Intelligence for software engineering and decision-making. These resources aim to streamline the development workflow and enhance technical decision-making through AI-driven insights.
+## AI Resume Classifier
 
-## 🛠️ Tools & Resources
+The main piece here. A logistic regression model that sorts resume text into one of five job families (Cybersecurity, Data Science, IT Support, Marketing, Software Engineering) using TF-IDF features, trained on a synthetic dataset built specifically to avoid being trivially separable by keyword.
 
-- **AI Resume Classifier (NLP + ML):** A tool that uses Natural Language Processing and Machine Learning to categorize and analyze resumes, helping recruiters and developers optimize their profiles.
-- **Effective AI Prompting:** A comprehensive guide on crafting high-quality prompts to get the most out of Large Language Models (LLMs) for coding and documentation.
-- **Neural Network Simulation:** A conceptual guide and simulation illustrating how neural networks adjust weights and make decisions, providing a deep dive into the mechanics of AI.
-- **Software Licensing:** Documentation and analysis of different software licenses, essential for open-source and commercial development.
+```bash
+cd "AI Resume Classifier (NLP + ML)"
+pip install -r requirements.txt
+python data/generate_dataset.py
+python train.py
+python predict.py
+```
 
-## 💡 Why These Tools?
+`train.py` gets 97.3% holdout accuracy and 98.3% 5-fold cross-validated accuracy on the generated data — see [the project's own README](<AI Resume Classifier (NLP + ML)/README.md>) for what that number does and doesn't mean, and for an honest list of what it would take to make this work on real resumes.
 
-- **Efficiency:** Automate repetitive tasks such as resume screening and initial documentation.
-- **Precision:** Learn to communicate more effectively with AI through structured prompting techniques.
-- **Knowledge:** Gain a deeper understanding of the underlying technology that powers modern AI tools.
-- **Compliance:** Ensure your projects follow the correct legal and open-source standards.
+## Other notes
+
+- [`Effective AI Prompting.md`](Effective%20AI%20Prompting.md) — exercises comparing vague vs. specific prompts across a few scenarios.
+- [`How a Neural Network Learns...md`](<How a Neural Network Learns: Simulating Weight Adjustment and Decision Making.md>) — a walkthrough of manually adjusting weights over a small set of training rounds.
+- [`SoftwareLicensing.md`](SoftwareLicensing.md) — lab notes on identifying and comparing open-source license terms.
+
+These are coursework notes, not polished guides — kept here because they're a reasonably useful reference for myself later.
 
 ---
-*Developed by Xenofon Gkioka*
+*Xenofon Gkioka*
