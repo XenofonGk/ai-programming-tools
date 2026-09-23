@@ -92,3 +92,16 @@ Honest list, in order:
    leaving the caller to interpret the percentage.
 4. More classes. Five job families is a coarse split; real hiring taxonomies
    run to dozens and overlap far more.
+
+## Run it as an API
+
+The classifier is also served over HTTP (FastAPI): a small web page, `POST /predict`, and interactive docs at `/docs`.
+
+```bash
+docker build -t resume-classifier "AI Resume Classifier (NLP + ML)"
+docker run --rm -p 8000:8000 resume-classifier
+curl -s localhost:8000/predict -H 'Content-Type: application/json' \
+  -d '{"text":"Managed SIEM alerts and ran penetration tests"}'
+```
+
+Notes on running a model in public: input is length-bounded, submitted text is never stored or logged, every response states the model was trained on synthetic data, and a confidence under 50% is flagged. The image trains the model at build time with pinned dependencies (so the pickle always matches the scikit-learn that loads it), runs as a non-root user, and is scanned with Trivy, signed with cosign and deployed by a pull-based pipeline with automatic rollback (see [Home-server](https://github.com/XenofonGk/Home-server)). Tests: `pip install -r requirements-dev.txt && python data/generate_dataset.py && python train.py && pytest`.
