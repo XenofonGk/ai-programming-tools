@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Resume Classifier</title>
+<style>
+  :root { color-scheme: light dark; --bg:#fff; --fg:#14161a; --mut:#5b6472; --line:#d9dde3; --acc:#2f5bea; }
+  @media (prefers-color-scheme: dark) { :root { --bg:#0f1115; --fg:#e8eaee; --mut:#98a1b0; --line:#2a2f38; --acc:#7c9bff; } }
+  body { margin:0; background:var(--bg); color:var(--fg); font:16px/1.5 system-ui, sans-serif; }
+  main { max-width:44rem; margin:0 auto; padding:1.5rem 1rem 3rem; }
+  h1 { font-size:1.4rem; margin:0 0 .25rem; } p.sub { color:var(--mut); margin:.25rem 0 1rem; }
+  textarea { width:100%; min-height:10rem; box-sizing:border-box; padding:.75rem; font:inherit; color:inherit; background:transparent; border:1px solid var(--line); border-radius:8px; }
+  button { margin-top:.75rem; padding:.6rem 1.1rem; font:inherit; color:#fff; background:var(--acc); border:0; border-radius:8px; cursor:pointer; }
+  button:disabled { opacity:.5; cursor:progress; }
+  #out { margin-top:1.25rem; } .bar { height:.6rem; border-radius:99px; background:var(--line); overflow:hidden; }
+  .bar > i { display:block; height:100%; background:var(--acc); }
+  .row { display:grid; grid-template-columns:11rem 1fr 3.5rem; gap:.6rem; align-items:center; margin:.35rem 0; font-size:.95rem; }
+  .warn { color:#b45309; } small { color:var(--mut); }
+</style>
+</head>
+<body>
+<main>
+  <h1>Resume Classifier</h1>
+  <p class="sub">Paste resume text; get a job family and how sure the model is. <a href="/docs">API docs</a></p>
+  <textarea id="t" maxlength="10000" placeholder="Built REST APIs in Python, deployed with Docker and CI/CD..."></textarea>
+  <button id="go">Classify</button>
+  <div id="out" aria-live="polite"></div>
+  <p><small>Trained on a synthetic dataset: a demo of the pipeline, not a hiring tool. Text is not stored or logged.</small></p>
+</main>
+<script>
+const $ = (id) => document.getElementById(id);
+$("go").addEventListener("click", async () => {
+  const text = $("t").value.trim(); if (!text) return;
+  $("go").disabled = true; $("out").textContent = "Classifying...";
+  try {
+    const r = await fetch("/predict", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify({ text }) });
+    const d = await r.json();
+    if (!r.ok) { $("out").textContent = "Error: " + (typeof d.detail === "string" ? d.detail : "invalid input"); return; }
+    const rows = Object.entries(d.probabilities).sort((a, b) => b[1] - a[1]).map(([k, v]) =>
+      `<div class="row"><span>${k.replace(/[<>&]/g, "")}</span><div class="bar"><i style="width:${(v * 100).toFixed(1)}%"></i></div><span>${(v * 100).toFixed(0)}%</span></div>`).join("");
+    $("out").innerHTML = `<h2>${d.label.replace(/[<>&]/g, "")} <small>(${(d.confidence * 100).toFixed(0)}% confident)</small></h2>` +
+      (d.low_confidence ? `<p class="warn">Low confidence: this text looks unlike the training data.</p>` : "") + rows;
+  } catch (e) { $("out").textContent = "Request failed."; }
+  finally { $("go").disabled = false; }
+});
+</script>
+</body>
+</html>
