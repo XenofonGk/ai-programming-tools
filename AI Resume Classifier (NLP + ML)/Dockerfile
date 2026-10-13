@@ -9,6 +9,8 @@ RUN python data/generate_dataset.py && python train.py
 
 # Stage 2: runtime. No pandas, no compiler, no training data; non-root.
 FROM python:3.12-slim
+# Base images lag behind Debian security fixes; pick them up at build time.
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get -y upgrade && rm -rf /var/lib/apt/lists/*
 ENV PYTHONDONTWRITEBYTECODE=1 PYTHONUNBUFFERED=1
 WORKDIR /app
 COPY requirements-api.txt ./
