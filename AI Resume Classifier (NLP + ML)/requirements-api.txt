@@ -2,6 +2,6 @@
 # Docker build with these exact versions, so the pickle always matches the
 # scikit-learn that loads it. Dependabot keeps these current.
 fastapi==0.141.1
-uvicorn==0.53.0
+uvicorn==0.54.0
 scikit-learn==1.9.1
 joblib==1.6.0
